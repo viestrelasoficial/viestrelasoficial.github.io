@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conectando o TikTok · VI Estrelas BR</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; display: grid; place-items: center; min-height: 90vh; text-align: center; color: #1d1d1f; }
+</style>
+</head>
+<body>
+<div>
+  <h1>Conectando o TikTok...</h1>
+  <p id="msg">Voltando para o programa no seu computador.</p>
+</div>
+<script>
+  // O TikTok nao aceita localhost como retorno do login. Esta pagina recebe o
+  // retorno e repassa (code, state) para o programa rodando no PC. A porta vem
+  // no comeco do state ("4400.abc123..."); o state completo segue intacto.
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var state = q.get('state') || '';
+    var m = /^(\d{2,5})\./.exec(state);
+    var porta = m ? m[1] : '4400';
+    if (!q.get('code') && !q.get('error')) {
+      document.getElementById('msg').textContent = 'Nenhum login recebido. Volte ao programa e clique em Conectar conta.';
+      return;
+    }
+    location.replace('http://localhost:' + porta + '/api/apps/tiktok/retorno' + location.search);
+  })();
+</script>
+</body>
+</html>
